@@ -16,14 +16,51 @@ public class MovieInfo {
 	private List<String> directors;
 	private List<String> actors;
 	private String genre;
-	private String rating;
+	private String ratingDate;
 	private String ratingGrade;
 	private List<String> posters;
+	private String nation;
+	private String plot;
+	private String runtime;
+	private String company;
+	
 	
 	public MovieInfo() {
 		this.actors = new ArrayList<>();
 		this.posters = new ArrayList<>();
 		this.directors = new ArrayList<>();
+	}
+		
+	public String getPlot() {
+		return plot;
+	}
+
+	public void setPlot(String plot) {
+		this.plot = plot;
+	}
+
+	public String getRuntime() {
+		return runtime;
+	}
+
+	public void setRuntime(String runtime) {
+		this.runtime = runtime;
+	}
+
+	public String getCompany() {
+		return company;
+	}
+
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	public String getNation() {
+		return nation;
+	}
+
+	public void setNation(String nation) {
+		this.nation = nation;
 	}
 	
 
@@ -34,7 +71,6 @@ public class MovieInfo {
 	public void setDirectors(List<String> directors) {
 		if(directors == null) {
 			logger.warn("No directors Data");
-			System.out.println("No directors Data");
 			return;
 		}
 		
@@ -99,7 +135,6 @@ public class MovieInfo {
 	public void setActors(List<String> actors) {
 		if(actors.isEmpty()) {
 			logger.warn("No actor Data");
-			System.out.println("No actor Data");
 			return;
 		}
 		
@@ -116,12 +151,12 @@ public class MovieInfo {
 		this.genre = genre;
 	}
 
-	public String getRating() {
-		return rating;
+	public String getRatingDate() {
+		return ratingDate;
 	}
 
-	public void setRating(String rating) {
-		this.rating = rating;
+	public void setRatingDate(String ratingDate) {
+		this.ratingDate = ratingDate;
 	}
 
 	public String getRatingGrade() {
@@ -137,9 +172,8 @@ public class MovieInfo {
 	}
 
 	public void setPosters(List<String> posters) {
-		if(actors.isEmpty()) {
+		if(posters.isEmpty()) {
 			logger.warn("No Poster Data");
-			System.out.println("No Poster Data");
 			return;
 		}
 		

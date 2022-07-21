@@ -27,9 +27,6 @@ public class GettingMovieData {
 		try {
 			logger.info("URL --> " + URLEncoder.encode(kmdbUrl,"utf-8").toString());
 			url = new URL(kmdbUrl);
-			
-			System.out.println(url.toString());
-			
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("Content-type", "application/json");
@@ -44,7 +41,6 @@ public class GettingMovieData {
 				}
 				br.close();
 				
-				
 				/*
 				 * KMDB JSON 구조
 				 * total 
@@ -54,7 +50,6 @@ public class GettingMovieData {
 				JSONObject totalData = JSONObject.fromObject(sb.toString());
 				JSONArray data = totalData.getJSONArray("Data");
 				JSONArray resultData = data.getJSONObject(0).getJSONArray("Result");
-				logger.info("resultData Size "+resultData.size());
 				for(int i = 0; i < resultData.size(); i++) {
 					MovieInfo movie = new MovieInfo();
 					JSONObject getData = resultData.getJSONObject(i);
@@ -64,6 +59,11 @@ public class GettingMovieData {
 					movie.setTitle(getData.getString("title"));
 					movie.setProdYear(getData.getString("prodYear"));
 					movie.setTitleEng(getData.getString("titleEng"));
+					movie.setNation(getData.getString("nation"));
+					movie.setCompany(getData.getString("company"));
+					movie.setPlot(getData.getString("plot"));
+					movie.setRuntime(getData.getString("runtime"));
+					movie.setGenre(getData.getString("genre"));
 					
 					ArrayList<String> directors = new ArrayList<>();
 					JSONArray directorData =  getData.getJSONArray("director");
@@ -72,23 +72,29 @@ public class GettingMovieData {
 					}
 					movie.setDirectors(directors);
 					
-//					ArrayList<String> actors = new ArrayList<>();
-//					JSONArray actorData = getData.getJSONArray("actor");
-//					for(int j = 0; j < actorData.size(); j++) {
-//						actors.add(actorData.getString(j));
-//					}
+					ArrayList<String> actors = new ArrayList<>();
+					JSONArray actorData = getData.getJSONArray("actor");
+					for(int j = 0; j < actorData.size(); j++) {
+						actors.add(actorData.getJSONObject(j).getString("actorNm"));
+					}
+					
+					JSONArray ratingData = getData.getJSONArray("rating").getJSONArray(1);
+					movie.setRatingGrade(ratingData.getJSONObject(0).getString("ratingGrade"));
+					movie.setRatingDate(ratingData.getJSONObject(0).getString("ratingDate"));
+
+					String[] temp = getData.getString("posters").split("\\|");
+					ArrayList<String> posters = new ArrayList<>();
+					for(int j = 0; j < temp.length; j++) {
+						posters.add(temp[j]);
+					}
+					movie.setPosters(posters);
 					
 					results.add(movie);
 				}
 			} else {
-				logger.info("fail... "+con.getResponseMessage()+" ?? "+con.getResponseCode());
+				logger.warn("KMDB Connection Fail. Error Code :"+con.getResponseCode());
 			}
-			
-			
-
 		} catch (Exception e) {
-			System.out.println("Fail to get KMDB Movie Data");
-			System.out.println(e.getMessage());
 			logger.warn("Fail to get KMDB Movie Data");
 			logger.warn("--> " + e.getMessage());
 		}
